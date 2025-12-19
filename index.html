@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="es">
 
 <head>
@@ -202,7 +202,7 @@
         // Clave pública obtenida del sistema
         const SUPABASE_KEY = "sb_publishable_HquZzxZVJbaDoYCLwDep_g_pyfv61OX";
 
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         async function fetchReport() {
             const idInput = document.getElementById('student-id');
@@ -222,7 +222,7 @@
 
             try {
                 // Call the RPC function
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .rpc('get_portal_report_by_id', { p_identification: identification });
 
                 if (error) throw error;
@@ -234,8 +234,8 @@
                 renderReport(data);
 
                 // TRACKING: Mark as viewed (Auto-Delete Trigger)
-                supabase.rpc('mark_portal_viewed', { p_identification: identification }).then(() => {
-                    console.log("View tracked & deleted");
+                supabaseClient.rpc('mark_portal_viewed', { p_identification: identification }).then(() => {
+                    console.log("View tracked (No Delete)");
                 }).catch(e => console.error("Tracking error", e));
 
             } catch (err) {
