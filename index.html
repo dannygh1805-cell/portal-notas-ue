@@ -607,9 +607,9 @@
                     // Calculation for status filtering
                     const formative = Object.entries(filteredGrades).filter(([k]) => !k.toLowerCase().includes('examen') && !k.toLowerCase().includes('proyecto') && !k.toLowerCase().includes('evaluación') && !k.startsWith('S')).map(([_,v]) => parseFloat(v)||0);
                     const summative = Object.entries(filteredGrades).filter(([k]) => k.toLowerCase().includes('examen') || k.toLowerCase().includes('proyecto') || k.toLowerCase().includes('evaluación') || k.startsWith('S')).map(([_,v]) => parseFloat(v)||0);
-                    const fAvg = formative.length > 0 ? formative.reduce((a,b)=>a+b,0)/formative.length : 0;
-                    const sAvg = summative.length > 0 ? summative.reduce((a,b)=>a+b,0)/summative.length : 0;
-                    const finalGrade = (fAvg > 0 && sAvg > 0) ? (fAvg * 0.7 + sAvg * 0.3) : (fAvg || sAvg);
+                    const fAvg = (sub.trimesters && sub.trimesters.find(t => t.trimester == trimNum)?.formative) || (formative.length > 0 ? formative.reduce((a, b) => a + b, 0) / formative.length : 0);
+                    const sAvg = (sub.trimesters && sub.trimesters.find(t => t.trimester == trimNum)?.summative) || (summative.length > 0 ? summative.reduce((a, b) => a + b, 0) / summative.length : 0);
+                    const finalGrade = (sub.trimesters && sub.trimesters.find(t => t.trimester == trimNum)?.average) || ((fAvg > 0 && sAvg > 0) ? (fAvg * 0.7 + sAvg * 0.3) : (fAvg || sAvg));
                     
                     const status = finalGrade >= 7 ? 'success' : (finalGrade >= 4.01 ? 'warning' : 'danger');
                     const matchesStatus = statusFilter === 'all' || statusFilter === status;
